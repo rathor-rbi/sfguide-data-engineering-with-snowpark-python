@@ -4,7 +4,7 @@
 [default]
 account = "A2254788778961.RBI_EUC1"
 user = "ARATHOR@RBI.COM"
-password = "NULL"
+password = "mypass"
 role = "HOL_ROLE"
 warehouse = "HOL_WH"
 database = "HOL_DB"
