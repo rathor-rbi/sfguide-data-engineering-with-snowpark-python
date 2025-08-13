@@ -70,6 +70,15 @@ def validate_raw_tables(session):
 # For local debugging
 if __name__ == "__main__":
     # Create a local Snowpark session
+    connection_parameters = {
+    "account": "A2254788778961-RBI_EUC1",      # e.g. "xy12345.us-east-1"
+    "user": "ARATHOR@RBI.COM",
+    "password": "1234",
+    "role": "ANALYST_INT",                  # optional but recommended
+    "warehouse": "ANALYSIS_INT",        # e.g. "COMPUTE_WH"
+    "database": "HOL_DB",          # e.g. "MY_DB"
+    "schema": "ANALYTICS"               # e.g. "PUBLIC"
+    }
     with Session.builder.getOrCreate() as session:
         load_all_raw_tables(session)
 #        validate_raw_tables(session)
