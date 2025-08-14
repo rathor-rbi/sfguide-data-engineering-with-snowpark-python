@@ -73,12 +73,12 @@ if __name__ == "__main__":
     connection_parameters = {
     "account": "A2254788778961-RBI_EUC1",      # e.g. "xy12345.us-east-1"
     "user": "ARATHOR@RBI.COM",
-    "password": "1234",
-    "role": "ANALYST_INT",                  # optional but recommended
-    "warehouse": "ANALYSIS_INT",        # e.g. "COMPUTE_WH"
+    "private_key_file": "/workspaces/sfguide-data-engineering-with-snowpark-python/.secrets/rsa_key.p8",
+    "role": "HOL_ROLE",                  # optional but recommended
+    "warehouse": "HOL_WH",        # e.g. "COMPUTE_WH"
     "database": "HOL_DB",          # e.g. "MY_DB"
     "schema": "ANALYTICS"               # e.g. "PUBLIC"
     }
-    with Session.builder.getOrCreate() as session:
+    with Session.builder.configs(connection_parameters).getOrCreate() as session:
         load_all_raw_tables(session)
 #        validate_raw_tables(session)

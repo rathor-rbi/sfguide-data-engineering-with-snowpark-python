@@ -107,7 +107,16 @@ def test_pos_view(session):
 # For local debugging
 if __name__ == "__main__":
     # Create a local Snowpark session
-    with Session.builder.getOrCreate() as session:
+    connection_parameters = {
+    "account": "A2254788778961-RBI_EUC1",      # e.g. "xy12345.us-east-1"
+    "user": "ARATHOR@RBI.COM",
+    "private_key_file": "/workspaces/sfguide-data-engineering-with-snowpark-python/.secrets/rsa_key.p8",
+    "role": "HOL_ROLE",                  # optional but recommended
+    "warehouse": "HOL_WH",        # e.g. "COMPUTE_WH"
+    "database": "HOL_DB",          # e.g. "MY_DB"
+    "schema": "ANALYTICS"               # e.g. "PUBLIC"
+    }
+    with Session.builder.configs(connection_parameters).getOrCreate() as session:
         create_pos_view(session)
         create_pos_view_stream(session)
 #        test_pos_view(session)
