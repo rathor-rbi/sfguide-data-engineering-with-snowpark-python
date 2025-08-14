@@ -4,6 +4,7 @@
 [default]
 account = "A2254788778961.RBI_EUC1"
 user = "ARATHOR@RBI.COM"
+authenticator = snowflake
 private_key_path = "/workspaces/sfguide-data-engineering-with-snowpark-python/.secrets/rsa_key.p8"
 role = "HOL_ROLE"
 warehouse = "HOL_WH"
