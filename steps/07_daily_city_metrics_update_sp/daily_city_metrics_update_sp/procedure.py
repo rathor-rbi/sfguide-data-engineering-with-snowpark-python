@@ -106,7 +106,16 @@ def main(session: Session) -> str:
 # Be aware you may need to type-convert arguments if you add input parameters
 if __name__ == '__main__':
     # Create a local Snowpark session
-    with Session.builder.getOrCreate() as session:
+    connection_parameters = {
+    "account": "A2254788778961-RBI_EUC1",      # e.g. "xy12345.us-east-1"
+    "user": "ARATHOR@RBI.COM",
+    "private_key_file": "/workspaces/sfguide-data-engineering-with-snowpark-python/.secrets/rsa_key.p8",
+    "role": "HOL_ROLE",                  # optional but recommended
+    "warehouse": "HOL_WH",        # e.g. "COMPUTE_WH"
+    "database": "HOL_DB",          # e.g. "MY_DB"
+    "schema": "ANALYTICS"               # e.g. "PUBLIC"
+    }
+    with Session.builder.configs(connection_parameters).getOrCreate() as session:
         import sys
         if len(sys.argv) > 1:
             print(main(session, *sys.argv[1:]))  # type: ignore
