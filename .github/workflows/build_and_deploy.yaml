@@ -36,7 +36,7 @@ jobs:
         env:
           SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
         run: |
-          mkdir -p ~/.snowflake
+          mkdir -p /home/runner/.snowflake
           echo "Debug: Checking private key secret..."
     
           # Check if the secret exists and has content
@@ -49,22 +49,22 @@ jobs:
           echo "Debug: First 50 characters: ${SNOWFLAKE_PRIVATE_KEY:0:50}"
     
           # Process the private key
-          echo "$SNOWFLAKE_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.snowflake/rsa_key.p8
-          chmod 600 ~/.snowflake/rsa_key.p8
+          echo "$SNOWFLAKE_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > /home/runner/.snowflake/rsa_key.p8
+          chmod 600 /home/runner/.snowflake/rsa_key.p8
     
           # Verify the file was created and has content
-          if [ ! -f ~/.snowflake/rsa_key.p8 ]; then
+          if [ ! -f /home/runner/.snowflake/rsa_key.p8 ]; then
             echo "ERROR: Private key file was not created"
             exit 1
           fi
     
-          echo "Debug: Private key file size: $(wc -c < ~/.snowflake/rsa_key.p8) bytes"
+          echo "Debug: Private key file size: $(wc -c < /home/runner/.snowflake/rsa_key.p8) bytes"
           echo "Debug: First line of key file:"
-          head -1 ~/.snowflake/rsa_key.p8
+          head -1 /home/runner/.snowflake/rsa_key.p8
           echo "Debug: Last line of key file:"
-          tail -1 ~/.snowflake/rsa_key.p8
-          echo "$SNOWFLAKE_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.snowflake/rsa_key.p8
-          chmod 600 ~/.snowflake/rsa_key.p8
+          tail -1 /home/runner/.snowflake/rsa_key.p8
+          echo "$SNOWFLAKE_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > /home/runner/.snowflake/rsa_key.p8
+          chmod 600 /home/runner/.snowflake/rsa_key.p8
       
       - name: Configure SnowCLI
         env:
@@ -74,18 +74,18 @@ jobs:
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
         run: |
-          cat > ~/.snowflake/config.toml <<EOL
+          cat > /home/runner/.snowflake/config.toml <<EOL
           [connections.cicd]
           account = "${SNOWFLAKE_ACCOUNT}"
           user = "${SNOWFLAKE_USER}"
           authenticator = "SNOWFLAKE_JWT"
-          private_key_path = "~/.snowflake/rsa_key.p8"
+          private_key_path = "/home/runner/.snowflake/rsa_key.p8"
           role = "${SNOWFLAKE_ROLE}"
           warehouse = "${SNOWFLAKE_WAREHOUSE}"
           database = "${SNOWFLAKE_DATABASE}"
           EOL
-          chmod 600 ~/.snowflake/config.toml
-          chown $USER ~/.snowflake/config.toml
+          chmod 600 /home/runner/.snowflake/config.toml
+          chown $USER /home/runner/.snowflake/config.toml
       
       - name: Deploy Snowpark apps
         env:
