@@ -49,7 +49,7 @@ for (directory_path, directory_names, file_names) in os.walk(root_directory):
     # SnowCLI accesses the passowrd directly from the SNOWFLAKE_PASSWORD environmnet variable
     exit_code_build = os.system(f"snow snowpark build --temporary-connection --account $SNOWFLAKE_ACCOUNT --user $SNOWFLAKE_USER --authenticator SNOWFLAKE_JWT --private-key-path /home/runner/.snowflake/rsa_key.p8 --role $SNOWFLAKE_ROLE --warehouse $SNOWFLAKE_WAREHOUSE --database $SNOWFLAKE_DATABASE")
     if exit_code_build != 0:
-        raise RuntimeError(f"Snowpark build failed with exit code {exit_code}")
+        raise RuntimeError(f"Snowpark build failed with exit code {exit_code_build}")
     exit_code_deploy = os.system(f"snow snowpark deploy --replace --temporary-connection --account $SNOWFLAKE_ACCOUNT --user $SNOWFLAKE_USER --authenticator SNOWFLAKE_JWT --private-key-path /home/runner/.snowflake/rsa_key.p8 --role $SNOWFLAKE_ROLE --warehouse $SNOWFLAKE_WAREHOUSE --database $SNOWFLAKE_DATABASE")
     if exit_code_deploy != 0:
-        raise RuntimeError(f"Snowpark deployment failed with exit code {exit_code}")
+        raise RuntimeError(f"Snowpark deployment failed with exit code {exit_code_deploy}")
