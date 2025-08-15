@@ -27,6 +27,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Upgrade Snowflake CLI
+        run: pip install --upgrade snowflake-cli-labs $GITHUB_WORKSPACE
         which snow
         snow --version
       
