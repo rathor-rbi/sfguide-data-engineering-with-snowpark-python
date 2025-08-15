@@ -32,6 +32,25 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
       
+      - name: Restore Snowflake Private Key
+        run: |
+          mkdir -p ~/.snowflake
+          echo "$SNOWFLAKE_PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.snowflake/rsa_key.p8
+          chmod 600 ~/.snowflake/rsa_key.p8
+      
+      - name: Configure SnowCLI
+        run: |
+          cat > ~/.snowflake/config.toml <<EOL
+      [connections.cicd]
+      account = "${SNOWFLAKE_ACCOUNT}"
+      user = "${SNOWFLAKE_USER}"
+      authenticator = "SNOWFLAKE_JWT"
+      private_key_path = "~/.snowflake/rsa_key.p8"
+      role = "${SNOWFLAKE_ROLE}"
+      warehouse = "${SNOWFLAKE_WAREHOUSE}"
+      database = "${SNOWFLAKE_DATABASE}"
+      EOL
+      
       - name: Deploy Snowpark apps
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
