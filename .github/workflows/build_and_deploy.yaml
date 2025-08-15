@@ -26,6 +26,9 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
 
+      - name: Upgrade Snowflake CLI
+        run: pip install --upgrade snowflake-cli-labs
+      
       - name: Deploy Snowpark apps
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
