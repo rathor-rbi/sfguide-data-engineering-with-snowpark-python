@@ -23,14 +23,14 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Python packages
-        run: pip install -r requirements.txt
-
       - name: Upgrade Snowflake CLI
         run: |
           pip install --upgrade snowflake-cli-labs
           which snow
           snow --version
+          
+      - name: Install Python packages
+        run: pip install -r requirements.txt
       
       - name: Deploy Snowpark apps
         env:
