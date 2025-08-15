@@ -25,7 +25,7 @@ def create_orders_stream(session):
     _ = session.sql("CREATE STREAM HARMONIZED.ORDERS_STREAM ON TABLE HARMONIZED.ORDERS").collect()
 
 def merge_order_updates(session):
-    _ = session.sql('ALTER WAREHOUSE HOL_WH SET WAREHOUSE_SIZE = XLARGE WAIT_FOR_COMPLETION = TRUE').collect()
+    _ = session.sql('ALTER WAREHOUSE HOL_WH SET WAREHOUSE_SIZE = SMALL WAIT_FOR_COMPLETION = TRUE').collect()
 
     source = session.table('HARMONIZED.POS_FLATTENED_V_STREAM')
     target = session.table('HARMONIZED.ORDERS')
