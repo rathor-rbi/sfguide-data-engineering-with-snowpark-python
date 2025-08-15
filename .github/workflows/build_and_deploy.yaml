@@ -28,9 +28,9 @@ jobs:
 
       - name: Upgrade Snowflake CLI
         run: |
-        pip install --upgrade snowflake-cli-labs $GITHUB_WORKSPACE
-        which snow
-        snow --version
+          pip install --upgrade snowflake-cli-labs $GITHUB_WORKSPACE
+          which snow
+          snow --version
       
       - name: Deploy Snowpark apps
         env:
