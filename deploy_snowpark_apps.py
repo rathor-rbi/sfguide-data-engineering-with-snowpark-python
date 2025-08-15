@@ -1,6 +1,18 @@
 import sys
 import os
 import yaml
+import subprocess
+
+cmd = [
+    "snow", "snowpark", "deploy", "--replace", "--temporary-connection",
+    "--account", os.environ["SNOWFLAKE_ACCOUNT"],
+    "--user", os.environ["SNOWFLAKE_USER"],
+    "--authenticator", "SNOWFLAKE_JWT",
+    "--private-key-path", "/home/runner/.snowflake/rsa_key.p8",
+    "--role", os.environ["SNOWFLAKE_ROLE"],
+    "--warehouse", os.environ["SNOWFLAKE_WAREHOUSE"],
+    "--database", os.environ["SNOWFLAKE_DATABASE"]
+    ]
 
 ignore_folders = ['.git', '__pycache__', '.ipynb_checkpoints']
 snowflake_project_config_filename = 'snowflake.yml'
@@ -50,6 +62,15 @@ for (directory_path, directory_names, file_names) in os.walk(root_directory):
     exit_code_build = os.system(f"snow snowpark build --temporary-connection --account $SNOWFLAKE_ACCOUNT --user $SNOWFLAKE_USER --authenticator SNOWFLAKE_JWT --private-key-path /home/runner/.snowflake/rsa_key.p8 --role $SNOWFLAKE_ROLE --warehouse $SNOWFLAKE_WAREHOUSE --database $SNOWFLAKE_DATABASE")
     if exit_code_build != 0:
         raise RuntimeError(f"Snowpark build failed with exit code {exit_code_build}")
-    exit_code_deploy = os.system(f"snow snowpark deploy --replace --temporary-connection --account $SNOWFLAKE_ACCOUNT --user $SNOWFLAKE_USER --authenticator SNOWFLAKE_JWT --private-key-path /home/runner/.snowflake/rsa_key.p8 --role $SNOWFLAKE_ROLE --warehouse $SNOWFLAKE_WAREHOUSE --database $SNOWFLAKE_DATABASE")
-    if exit_code_deploy != 0:
-        raise RuntimeError(f"Snowpark deployment failed with exit code {exit_code_deploy}")
+    # exit_code_deploy = os.system(f"snow snowpark deploy --replace --temporary-connection --account $SNOWFLAKE_ACCOUNT --user $SNOWFLAKE_USER --authenticator SNOWFLAKE_JWT --private-key-path /home/runner/.snowflake/rsa_key.p8 --role $SNOWFLAKE_ROLE --warehouse $SNOWFLAKE_WAREHOUSE --database $SNOWFLAKE_DATABASE")
+    # if exit_code_deploy != 0:
+    #     raise RuntimeError(f"Snowpark deployment failed with exit code {exit_code_deploy}")
+
+    print(f"Running: {' '.join(cmd)}", flush=True)
+    result = subprocess.run(cmd, text=True, capture_output=True)
+
+    print(result.stdout)
+    print(result.stderr, file=sys.stderr)
+
+    if result.returncode != 0:
+        raise RuntimeError(f"Snowpark deployment failed with exit code {result.returncode}")
